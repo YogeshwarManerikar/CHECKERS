@@ -1,6 +1,6 @@
 # CHECKERS
-This is the game which is coded in Java 
-using javaFX
+ 
+using Python
 
 Game rules
 
