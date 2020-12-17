@@ -1,6 +1,6 @@
 import pygame
 
-from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED
+from checkers.constants import WIDTH, HEIGHT, SQUARE_SIZE, BLACK, RED, WHITE
 from checkers.board import Board
 from checkers.menu import *
 
@@ -9,12 +9,23 @@ FPS = 60
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
+def get_row_col_from_mouse(pos):
+    x, y = pos
+    row = y // SQUARE_SIZE
+    col = x // SQUARE_SIZE
+    return row, col
+
+
 class Game:
     def __init__(self):
         pygame.init()
+        self.selected = None
+        self.board = Board()
+        self.turn = RED
+        self.valid_moves = {}
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = WIDTH,HEIGHT
+        self.DISPLAY_W, self.DISPLAY_H = WIDTH, HEIGHT
         self.display = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
         self.window = pygame.display.set_mode(((self.DISPLAY_W, self.DISPLAY_H)))
         self.font_name = '8-BIT WONDER.TTF'
@@ -71,11 +82,19 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
-            board.draw(WIN)
+                    pos = pygame.mouse.get_pos()
+                    row, col = get_row_col_from_mouse(pos)
+                    self.select(row, col)
+
+            self.board.draw(self.window)             #updating checkers board windows on each valid moves
+            self.draw_valid_moves(self.valid_moves)
             pygame.display.update()
+
         pygame.quit()
+
+
 
     def _move(self, row, col):
         piece = self.board.get_piece(row, col)
@@ -89,3 +108,43 @@ class Game:
             return False
 
         return True
+
+    def select(self, row, col):
+        if self.selected:
+            result = self._move(row, col)
+            if not result:
+                self.selected = None
+                self.select(row, col)
+
+        piece = self.board.get_piece(row, col)
+        if piece != 0 and piece.color == self.turn:
+            self.selected = piece
+            self.valid_moves = self.board.get_valid_moves(piece)
+            return True
+
+        return False
+
+    def draw_valid_moves(self, moves):
+        for move in moves:
+            row, col = move
+            pygame.draw.circle(self.window, BLACK,
+                               (col * SQUARE_SIZE + SQUARE_SIZE // 2, row * SQUARE_SIZE + SQUARE_SIZE // 2), 15)
+
+    def change_turn(self):
+        self.valid_moves = {}
+        if self.turn == RED:
+            self.turn = WHITE
+        else:
+            self.turn = RED
+
+    def _init(self):
+        self.selected = None
+        self.board = Board()
+        self.turn = RED
+        self.valid_moves = {}
+
+    def winner(self):
+        return self.board.winner()
+
+    def reset(self):
+        self._init()

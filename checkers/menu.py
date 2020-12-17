@@ -1,5 +1,6 @@
 import pygame
 
+
 class Menu():
     def __init__(self, game):
         self.game = game
@@ -9,12 +10,13 @@ class Menu():
         self.offset = - 100
 
     def draw_cursor(self):
-        self.game.draw_text('*', 15, self.cursor_rect.x, self.cursor_rect.y)
+        self.game.draw_text('===>', 30, self.cursor_rect.x, self.cursor_rect.y)
 
     def blit_screen(self):
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
+
 
 class MainMenu(Menu):
     def __init__(self, game):
@@ -38,7 +40,6 @@ class MainMenu(Menu):
             self.game.draw_text("Credits", 20, self.creditsx, self.creditsy)
             self.draw_cursor()
             self.blit_screen()
-
 
     def move_cursor(self):
         if self.game.DOWN_KEY:
@@ -72,6 +73,7 @@ class MainMenu(Menu):
             elif self.state == 'Credits':
                 self.game.curr_menu = self.game.credits
             self.run_display = False
+
 
 class OptionsMenu(Menu):
     def __init__(self, game):
@@ -108,6 +110,7 @@ class OptionsMenu(Menu):
             # TO-DO: Create a Volume Menu and a Controls Menu
             pass
 
+
 class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -121,13 +124,9 @@ class CreditsMenu(Menu):
                 self.run_display = False
             self.game.display.fill(self.game.BLACK)
             self.game.draw_text('Credits', 20, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 - 20)
-            self.game.draw_text('Made by me', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
+            self.game.draw_text('Made by Team', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 10)
+            self.game.draw_text('Himanshul Keshri', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 30)
+            self.game.draw_text('Yogeshwar', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 50)
+            self.game.draw_text('Aniket', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 70)
+            self.game.draw_text('Smitha', 15, self.game.DISPLAY_W / 2, self.game.DISPLAY_H / 2 + 90)
             self.blit_screen()
-
-
-
-
-
-
-
-
