@@ -12,7 +12,7 @@ class Menu():
     def draw_cursor(self):
         self.game.draw_text('===>', 30, self.cursor_rect.x, self.cursor_rect.y)
 
-    def blit_screen(self):
+    def draw_cursor(self):
         self.game.window.blit(self.game.display, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
@@ -82,7 +82,9 @@ class OptionsMenu(Menu):
         self.volx, self.voly = self.mid_w, self.mid_h + 20
         self.controlsx, self.controlsy = self.mid_w, self.mid_h + 40
         self.cursor_rect.midtop = (self.volx + self.offset, self.voly)
-
+   
+   "/* this is not working */"
+   
     def display_menu(self):
         self.run_display = True
         while self.run_display:
